@@ -63,6 +63,7 @@ body {
     cursor: pointer;
 
     -webkit-tap-highlight-color: transparent;
+    color: black;
 }
 
 .next-btn:active {
