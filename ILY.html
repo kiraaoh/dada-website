@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+                   viewport-fit=cover">
+
+    <title>Dada-I love you</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style1.css">
+</head>
+
+<body>
+
+
+    <main class="index-page">
+
+        <section class="login-section">
+
+            <div class="login-box">
+                <h1>Do You Love Me?</h1>
+
+
+                <button id="meNextBtn">
+                    OFC
+                </button>
+                <button id="NoBtn">
+                    HELL NAH
+                </button>
+                <div id="love-err"></div>
+                <button id="loveBombBtn">Send me Love Bomb!</button>
+
+            </div>
+
+        </section>
+
+    </main>
+    <script src="js/jquery.js"></script>
+    <script>
+
+        const NextBtn = document.getElementById("meNextBtn");
+        const NoBtn = document.getElementById("NoBtn");
+
+        NextBtn.addEventListener("click", function () {
+            // 1. Add fade-out class to body
+            document.body.classList.add("fade-out");
+
+            // 2. Wait 500ms for the fade animation before changing page
+            setTimeout(function () {
+                window.location.href = "ILY2.html";
+            }, 500);
+        });
+
+        let fontSize = 16; // Initial font size in pixels
+
+        NoBtn.addEventListener("click", function () {
+            const loveErr = document.getElementById("love-err");
+
+            loveErr.innerHTML = "Must click GREEN!";
+            fontSize += 4; // Increases font size by 4px on each click
+            loveErr.style.fontSize = fontSize + "px";
+        });
+
+        const btn = document.getElementById('loveBombBtn');
+
+        btn.addEventListener('click', (e) => {
+            const hearts = ['💖', '💕', '❤️', '💗', '😍', '✨'];
+            const count = 30; // Number of hearts per explosion
+
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-particle');
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+
+                // Starting position near button center
+                const rect = btn.getBoundingClientRect();
+                heart.style.left = `${rect.left + rect.width / 2}px`;
+                heart.style.top = `${rect.top + rect.height / 2}px`;
+
+                // Random scatter directions using CSS variables
+                const xOffset = (Math.random() - 0.5) * 300;
+                const yOffset = (Math.random() - 0.5) * 200 - 50;
+
+                heart.style.setProperty('--x-offset', `${xOffset}px`);
+                heart.style.setProperty('--y-offset', `${yOffset}px`);
+
+                document.body.appendChild(heart);
+
+                // Remove element after animation finishes
+                setTimeout(() => heart.remove(), 1500);
+            }
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>

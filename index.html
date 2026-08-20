@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+                   viewport-fit=cover">
+
+    <title>Dada</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+
+    <main class="index-page">
+
+        <section class="login-section">
+
+            <div class="login-box">
+
+                <h1>Your Name</h1>
+
+
+                <input type="text" id="nameInput" placeholder="type here" autocomplete="off" autofocus>
+
+                <button id="nameNextBtn">
+                    Next
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+    <script>
+        const nameInput = document.getElementById("nameInput");
+        const nameNextBtn = document.getElementById("nameNextBtn");
+
+        nameNextBtn.addEventListener("click", function () {
+
+            const name = nameInput.value.trim();
+
+            if (name === "") {
+                alert("Please enter your name.");
+                return;
+            }
+
+            // Save the name
+            localStorage.setItem("dadaName", name);
+
+            if (name === "adminCX") {
+                window.location.href = "password.html";
+            } else {
+                window.location.href = "bottom.html";
+            }
+
+        });
+
+
+        nameInput.addEventListener("keydown", function (event) {
+
+            if (event.key === "Enter") {
+                nameNextBtn.click();
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    background-color: #0e1b2e; /* Dark Sky Blue */
+    overflow: hidden;
+}
+
+#fireworks {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.index-page {
+    position: relative;
+    z-index: 1;
+}
+
+.login-section {
+    background-image: none;
+}
+
+.login-box {
+    background-color: rgba(42, 69, 99, 1);
+    color: white;
+}
+
+.login-box h2 {
+    margin-bottom: 16px;
+
+    font-size: 22px;
+    font-weight: normal;
+}
+
+.screen {
+    background-color: #b9f58d;
+    padding: 10px;
+    border-radius: 30px;
+    color: rgba(42, 69, 99, 1);
+    box-shadow: 0 4px 15px #b9f58d;
+    margin-bottom: 20px;
+}
+
+.quantity-container {
+    display: flex;
+    justify-content: space-between;
+    /* Pushes minus to left, plus to right */
+    align-items: center;
+    width: 100%;
+    /* Takes full width of the parent box */
+}
+
+#minusBtn,
+#plusBtn {
+    background-color: white;
+    width: 45%;
+    padding: 10px;
+    /* Adds height/padding for better tap targets */
+    border: 1px solid #ccc;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 25px;
+}
+
+#plusBtn, #minusBtn {
+  border: none;
+  background-color: #ff4d6d;
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+  transition: all 0.2s ease;
+}
+
+#plusBtn:hover, #minusBtn:hover {
+  box-shadow: 0 6px 20px rgba(255, 77, 109, 0.6);
+  transform: scale(1.05);
+}
+
+
+#lovecount {
+    font-size: 1.8rem;
+    min-height: 40px;
+    /* Prevents the box from collapsing when empty */
+    margin-top: 10px;
+}
+
+body {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+body.fade-out {
+    opacity: 0;
+}

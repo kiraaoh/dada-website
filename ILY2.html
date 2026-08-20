@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+                   viewport-fit=cover">
+
+    <title>Dada - I love you</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style2.css">
+</head>
+
+<body>
+    <canvas id="fireworks"></canvas>
+
+
+    <main class="index-page">
+
+        <section class="login-section">
+
+            <div class="login-box">
+                <div class="screen">
+                    <h1>I LOVE YOU SOOO MUCHH TOO</h1>
+                    <div id="lovecount"></div>
+                </div>
+                <div class="quantity-container">
+                    <button id="plusBtn" type="button">+</button>
+                    <button id="minusBtn" type="button">-</button>
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+    <script src="js/jquery.js"></script>
+    <script>
+        let count = 0;
+
+        const loveCount = document.getElementById("lovecount");
+        const plusBtn = document.getElementById("plusBtn");
+        const minusBtn = document.getElementById("minusBtn");
+
+        // --- CANVAS & BACKGROUND ANIMATIONS ---
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        let particles = [];
+        let raindrops = [];
+        const colors = ['#ff4d4d', '#ffaf40', '#fffa65', '#32ff7e', '#18dcff', '#7d5fff', '#ffb8b8'];
+
+        // --- FIREWORK PARTICLE CLASS ---
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 1;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.05; // Gravity
+                this.alpha -= this.decay;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // --- RAINDROP CLASS ---
+        let rainTimer = null;
+        let isRaining = false;
+
+        // --- UPDATED RAINDROP CLASS ---
+        class Raindrop {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * -canvas.height;
+                this.length = Math.random() * 15 + 10;
+                this.speed = Math.random() * 8 + 6;
+                this.alpha = Math.random() * 0.5 + 0.3;
+            }
+
+            update() {
+                this.y += this.speed;
+
+                // When drop reaches the bottom:
+                if (this.y > canvas.height) {
+                    if (isRaining) {
+                        // Loop back to top if still raining
+                        this.y = Math.random() * -20;
+                        this.x = Math.random() * canvas.width;
+                        return true;
+                    } else {
+                        // Return false to remove off-screen drop when rain stops
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.strokeStyle = `rgba(174, 214, 241, ${this.alpha})`;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x, this.y + this.length);
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        // --- TRIGGER RAIN FOR 5 SECONDS ---
+        function startRain() {
+            isRaining = true;
+
+            // Spawn a batch of raindrops
+            for (let i = 0; i < 40; i++) {
+                raindrops.push(new Raindrop());
+            }
+
+            // Reset the 5-second timer if clicked again
+            if (rainTimer) clearTimeout(rainTimer);
+
+            // Stop creating new drops after 5000ms (5 seconds)
+            rainTimer = setTimeout(() => {
+                isRaining = false;
+            }, 5000);
+        }
+
+        // --- UPDATED ANIMATE LOOP (RAIN SECTION) ---
+        function animate() {
+            ctx.fillStyle = 'rgba(14, 27, 46, 0.25)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Render Fireworks
+            particles.forEach((p, index) => {
+                if (p.alpha <= 0) {
+                    particles.splice(index, 1);
+                } else {
+                    p.update();
+                    p.draw();
+                }
+            });
+
+            // Render & Clean Up Raindrops
+            for (let i = raindrops.length - 1; i >= 0; i--) {
+                const active = raindrops[i].update();
+                if (!active) {
+                    raindrops.splice(i, 1); // Remove drop once it falls off screen
+                } else {
+                    raindrops[i].draw();
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // --- MINUS BUTTON CLICK EVENT ---
+        minusBtn.addEventListener("click", function () {
+            if (count > 0) {
+                count--;
+                updateDisplay();
+
+                // Start/extend 5-second rain
+                startRain();
+            }
+        });
+
+        function spawnFirework() {
+            const x = Math.random() * (canvas.width * 0.8) + canvas.width * 0.1;
+            const y = Math.random() * (canvas.height * 0.4) + canvas.height * 0.1;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function spawnRain() {
+            // Add 10 drops per click up to a maximum
+            if (raindrops.length < 150) {
+                for (let i = 0; i < 15; i++) {
+                    raindrops.push(new Raindrop());
+                }
+            }
+        }
+
+        // --- MAIN ANIMATION LOOP ---
+        function animate() {
+            // Dark sky blue fill with slight transparency for motion trails
+            ctx.fillStyle = 'rgba(14, 27, 46, 0.25)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Render Fireworks
+            particles.forEach((p, index) => {
+                if (p.alpha <= 0) {
+                    particles.splice(index, 1);
+                } else {
+                    p.update();
+                    p.draw();
+                }
+            });
+
+            // Render Rain
+            raindrops.forEach((drop) => {
+                drop.update();
+                drop.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // --- BUTTON EVENT LISTENERS ---
+        function updateDisplay() {
+            if (count === 0) {
+                loveCount.innerHTML = "";
+            } else {
+                loveCount.innerHTML = "❤️".repeat(count);
+            }
+        }
+
+        plusBtn.addEventListener("click", function () {
+            if (count >= 7) {
+                document.body.classList.add("fade-out");
+                setTimeout(function () {
+                    window.location.href = "wishes.html";
+                }, 500);
+            } else {
+                count++;
+                updateDisplay();
+
+                // Launch fireworks on Plus click
+                spawnFirework();
+                spawnFirework();
+            }
+        });
+
+        minusBtn.addEventListener("click", function () {
+            if (count > 0) {
+                count-1;
+                updateDisplay();
+
+                // Spawn rain on Minus click
+                spawnRain();
+            }
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>

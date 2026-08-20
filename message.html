@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+                   viewport-fit=cover">
+
+    <title>Dada-message</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <main class="index-page">
+
+        <section class="login-section">
+
+            <div class="login-box">
+
+                <h1>Any message you want to tell me?</h1>
+
+
+                <textarea id="messageInput" placeholder="type here" autocomplete="off" autofocus></textarea>
+
+                <button id="meNextBtn">
+                    Next
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+    <script src="js/jquery.js"></script>
+    <script>
+
+        const messageInput = document.getElementById("messageInput");
+        const NextBtn = document.getElementById("meNextBtn");
+
+
+        // PUT YOUR GOOGLE APPS SCRIPT URL HERE
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykqYMnOP5yTSQunBzL4kzU8LeXkxwfS4Zt1IcCBAv9tuCLdZa8ot0seBHHi746cc0vRA/exec";
+
+
+        NextBtn.addEventListener("click", function () {
+
+            const message = messageInput.value.trim();
+
+            if (message === "") {
+                alert("Please enter a message.");
+                return;
+            }
+
+
+            // Get previous answers
+            const name = localStorage.getItem("dadaName") || "";
+            const me = localStorage.getItem("dadaMe") || "";
+
+
+            // Create the data
+            const data = {
+                name: name,
+                me: me,
+                message: message
+            };
+
+
+            // Send to Google Sheets
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "text/plain"
+                },
+                body: JSON.stringify(data)
+            })
+                .then(function () {
+
+                    // Clear saved information
+                    localStorage.removeItem("dadaName");
+                    localStorage.removeItem("dadaMe");
+
+                    // Continue to next page
+                    window.location.href = "btnpg1.html";
+
+                })
+                .catch(function (error) {
+
+                    console.error(error);
+
+                    alert("Unable to send message.");
+
+                });
+
+        });
+
+
+        messageInput.addEventListener("keydown", function (event) {
+
+            // Enter = submit
+            // Shift + Enter = new line
+            if (event.key === "Enter" && !event.shiftKey) {
+
+                event.preventDefault();
+
+                NextBtn.click();
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

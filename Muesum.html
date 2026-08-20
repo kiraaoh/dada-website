@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dada - Muesum</title>
+    <link rel="stylesheet" href="css/style3.css">
+
+
+</head>
+
+<body>
+    <div class="page-container">
+
+        <main>
+            <!-- 8 Row Images stacked vertically -->
+            <div class="gallery-container">
+                <img src="images/row1.png" alt="Row 1">
+                <img src="images/row2.png" alt="Row 2">
+                <img src="images/row3.png" alt="Row 3">
+                <img src="images/row4.png" alt="Row 4">
+                <img src="images/row5.png" alt="Row 5">
+                <img src="images/row6.png" alt="Row 6">
+                <img src="images/row7.png" alt="Row 7">
+                <img src="images/row8.png" alt="Row 8">
+                <img src="images/row9.png" alt="Row 9">
+                <img src="images/row10.png" alt="Row 10">
+                <img src="images/row11.png" alt="Row 11">
+            </div>
+
+            <!-- Next Button -->
+            <div class="button-container">
+                <button class="next-btn" id="nextBtn">Next</button>
+            </div>
+        </main>
+
+        <!-- Sticky Bottom Illustration -->
+        <div class="museum-footer">
+            <img src="images/museum-footer.png" alt="Museum Audience Banner">
+        </div>
+
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script>
+        const nextBtn = document.getElementById("nextBtn");
+
+        nextBtn.addEventListener("click", function () {
+            document.body.classList.add("fade-out");
+            setTimeout(function () {
+                window.location.href = "final.html";
+            }, 500);
+        });
+    </script>
+
+</body>
+
+</html>

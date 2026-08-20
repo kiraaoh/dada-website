@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin View</title>
+    <style>
+        body {
+            background-color: #f0e6f2;
+            font-family: 'Playfair Display', Georgia, serif;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .user-pill {
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 16px 24px;
+            margin-bottom: 16px;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            text-align: left;
+            font-size: 18px;
+            transition: transform 0.1s ease;
+        }
+
+        .user-pill:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            display: block;
+            border-radius: 30px 30px 0 0 ;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            bottom: 0;
+            background-color: #f0e6f2;
+            z-index: 10;
+            /* Keeps it above scrolled content */
+            padding: 20px;
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Hello Admin</h1>
+        <p class="subtitle">These are the messages</p>
+        <div id="user-list">Loading messages...</div>
+        <a href="index.html" class="btn">Logout</a>
+    </div>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzv83bCr1LjD6N_EVtpLl42KhmSVpqQQobZOYbf4cd6SRiURHOY8bSFYY-X6moZoiDd/exec";
+
+        fetch(GOOGLE_SCRIPT_URL)
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById("user-list");
+                list.innerHTML = "";
+
+                // Reverse data array so newest entries are at the top
+                const reversedData = data.reverse();
+
+                reversedData.forEach((item, index) => {
+                    const pill = document.createElement("div");
+                    pill.className = "user-pill";
+                    pill.textContent = item.name || `User ${index + 1}`;
+
+                    pill.onclick = () => {
+                        // Save selected message data locally and open message view
+                        localStorage.setItem("selectedMessage", JSON.stringify(item));
+                        window.location.href = "admin-message.html";
+                    };
+
+                    list.appendChild(pill);
+                });
+            })
+            .catch(err => {
+                document.getElementById("user-list").textContent = "Failed to load messages.";
+                console.error(err);
+            });
+    </script>
+</body>
+
+</html>

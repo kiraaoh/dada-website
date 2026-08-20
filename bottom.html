@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,
+                   viewport-fit=cover">
+
+    <title>Dada-WhoamI</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <main class="index-page">
+
+        <section class="login-section">
+
+            <div class="login-box">
+
+                <h1>Who am I to you?</h1>
+
+
+                <input type="text" id="meInput" placeholder="type here" autocomplete="off" autofocus>
+
+                <button id="meNextBtn">
+                    Next
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+    <script src="js/jquery.js"></script>
+    <script>
+        const meInput = document.getElementById("meInput");
+        const NextBtn = document.getElementById("meNextBtn");
+
+        NextBtn.addEventListener("click", function () {
+
+            const me = meInput.value.trim();
+
+            if (me === "") {
+                alert("Please enter something.");
+                return;
+            }
+
+            // Save the answer
+            localStorage.setItem("dadaMe", me);
+
+            window.location.href = "message.html";
+
+        });
+
+
+        meInput.addEventListener("keydown", function (event) {
+
+            if (event.key === "Enter") {
+                NextBtn.click();
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>

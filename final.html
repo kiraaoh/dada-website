@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dada - Letter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #2c2c2c;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: #ffffff;
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 410px;
+            height: 100vh;
+            padding: 20px 20px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* Top Header Title */
+        .page-title {
+            font-size: 2.1rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin: 10px 0 15px;
+            text-align: center;
+        }
+
+        /* Wrapper to hold Green Card and fixed Progress Bar */
+        .green-card-wrapper {
+            width: 100%;
+            height: 520px;
+            background-color: #6f9b7c;
+            border-radius: 32px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .green-card {
+            flex: 1;
+            color: #0d0d0d;
+            padding: 28px 24px 15px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+        }
+
+        .green-card::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .green-card::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+        }
+
+        .letter-content {
+            font-size: 1.05rem;
+            line-height: 1.55;
+            font-weight: 800;
+            margin: 0;
+            white-space: pre-line;
+        }
+
+        /* Segmented Progress Bar */
+        .progress-bar-container {
+            display: flex;
+            gap: 2px;
+            padding: 0 18px 18px;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #6f9b7c; /* Keeps background seamless */
+        }
+
+        .progress-segment {
+            flex: 1;
+            height: 16px;
+            background-color: #4a6853; /* Dark green/grey inactive state */
+            transition: background-color 0.25s ease;
+        }
+
+        .progress-segment:first-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .progress-segment:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .progress-segment.active {
+            background-color: #e2e2e2; /* Light active state */
+        }
+
+        /* Button Row Container */
+        .button-row {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            gap: 14px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #484848;
+            border-radius: 24px;
+            padding: 16px 28px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            min-width: 110px;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            background-color: #333333;
+        }
+
+        /* Hide Prev initially */
+        #prevBtn {
+            display: none;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-container">
+
+        <!-- Title -->
+        <h1 class="page-title">DADA</h1>
+
+        <!-- Green Card + Progress Bar Container -->
+        <div class="green-card-wrapper">
+            <div class="green-card" id="greenCard">
+                <p class="letter-content" id="letterText"></p>
+            </div>
+            <!-- Progress Bar pinned to bottom inside card -->
+            <div class="progress-bar-container" id="progressBar"></div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-row">
+            <button class="btn" id="prevBtn">Prev</button>
+            <button class="btn" id="nextBtn">Next</button>
+        </div>
+
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script>
+        const letterPages = [
+            "Hi cutie",
+            "Hi cutie2",
+            "Hi cutie3",
+            "Hi cutie4",
+            "Hi cutie5",
+            "Hi cutie6",
+            "Hi cutie6",
+        ];
+
+        let currentPage = 0;
+
+        const letterText = document.getElementById("letterText");
+        const greenCard = document.getElementById("greenCard");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const progressBar = document.getElementById("progressBar");
+
+        // Dynamically build progress bar segments
+        function initProgressBar() {
+            progressBar.innerHTML = "";
+            for (let i = 0; i < letterPages.length; i++) {
+                const segment = document.createElement("div");
+                segment.className = "progress-segment";
+                progressBar.appendChild(segment);
+            }
+        }
+
+        function updatePage() {
+            letterText.textContent = letterPages[currentPage];
+            greenCard.scrollTop = 0;
+
+            // Highlight progress segments up to current page
+            const segments = document.querySelectorAll(".progress-segment");
+            segments.forEach((segment, index) => {
+                if (index <= currentPage) {
+                    segment.classList.add("active");
+                } else {
+                    segment.classList.remove("active");
+                }
+            });
+
+            if (currentPage === 0) {
+                prevBtn.style.display = "none";
+            } else {
+                prevBtn.style.display = "flex";
+            }
+
+            if (currentPage === letterPages.length - 1) {
+                nextBtn.textContent = "Back to home";
+            } else {
+                nextBtn.textContent = "Next";
+            }
+        }
+
+        nextBtn.addEventListener("click", function () {
+            if (currentPage < letterPages.length - 1) {
+                currentPage++;
+                updatePage();
+            } else {
+                document.body.classList.add("fade-out");
+                setTimeout(function () {
+                    window.location.href = "index.html";
+                }, 500);
+            }
+        });
+
+        prevBtn.addEventListener("click", function () {
+            if (currentPage > 0) {
+                currentPage--;
+                updatePage();
+            }
+        });
+
+        // Initialize progress bar and page view
+        initProgressBar();
+        updatePage();
+    </script>
+
+</body>
+
+</html>

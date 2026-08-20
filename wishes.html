@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dada - Wishes</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .login-section {
+            background-image: none;
+            background-color: rgba(42, 69, 99, 1);
+        }
+
+        .login-box {
+            background-color: rgba(42, 69, 99, 1);
+            color: white;
+        }
+
+        .login-box h1 {
+            margin-bottom: 0;
+            font-size: 40px;
+            font-weight: normal;
+        }
+
+        .login-box h2 {
+
+            font-size: 30px;
+            font-weight: normal;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        /* Clickable style for the title section */
+        #cake {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Chinese wishes hidden by default */
+        #wishes-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #wishes-container p {
+            margin: 8px 0;
+            font-size: 24px;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+            /* Prevents unwanted horizontal scrollbars */
+        }
+
+        body {
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+
+        body.slide-up {
+            transform: translateY(-100vh);
+            /* Slides the whole page upwards */
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="index-page">
+        <section class="login-section">
+            <div class="login-box">
+
+                <!-- Clicking anywhere on #cake will reveal the wishes -->
+                <div id="cake">
+                    <h1>21</h1>
+                    <h2>HAPPY</h2>
+                    <h2>BIRTHDAY</h2>
+                    <h2>MY BELOVED</h2>
+                    <h2>SHUAI GEGE DADA</h2>
+
+                    <!-- Chinese wishes list (transcribed from design) -->
+                    <div id="wishes-container">
+                        <p>生辰吉乐</p>
+                        <p>好运连连</p>
+                        <p>如愿以偿</p>
+                        <p>四季同行</p>
+                        <p>平安喜乐</p>
+                        <p>快乐无忧</p>
+                        <p>童心未泯</p>
+                        <p>岁岁欢愉</p>
+                        <p>万事顺意</p>
+                        <p>前程似锦</p>
+                        <p>光芒万丈</p>
+                        <p>未来可期</p>
+                        <p>大有可为</p>
+                        <p>大权在握</p>
+                        <p>爱意绵长</p>
+                        <p>余生有你</p>
+                        <p>只偏爱你</p>
+                        <p>与你共度</p>
+                        <p>一心一意</p>
+                        <p>目之所至</p>
+                        <p>此生挚爱</p>
+                        <button id="meNextBtn">
+                            Next
+                        </button>
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+    </main>
+
+    <script src="jquery.js"></script>
+    <script>
+        // Reveal Chinese wishes smoothly when clicking on the title
+        $("#cake").on("click", function () {
+            $("#wishes-container").slideDown(800);
+        });
+
+        // Next button page transition
+        const NextBtn = document.getElementById("meNextBtn");
+        NextBtn.addEventListener("click", function () {
+            document.body.classList.add("slide-up");
+            setTimeout(function () {
+                window.location.href = "Muesum.html";
+            }, 500);
+        });
+    </script>
+
+</body>
+
+</html>
