@@ -35,15 +35,12 @@
 
     </main>
     <script src="js/jquery.js"></script>
-    <script>
+        <script>
 
         const messageInput = document.getElementById("messageInput");
         const NextBtn = document.getElementById("meNextBtn");
 
-
-        // PUT YOUR GOOGLE APPS SCRIPT URL HERE
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykqYMnOP5yTSQunBzL4kzU8LeXkxwfS4Zt1IcCBAv9tuCLdZa8ot0seBHHi746cc0vRA/exec";
-
 
         NextBtn.addEventListener("click", function () {
 
@@ -54,11 +51,13 @@
                 return;
             }
 
+            // Disable button immediately to prevent double submissions
+            NextBtn.disabled = true;
+            NextBtn.textContent = "Sending...";
 
             // Get previous answers
             const name = localStorage.getItem("dadaName") || "";
             const me = localStorage.getItem("dadaMe") || "";
-
 
             // Create the data
             const data = {
@@ -66,7 +65,6 @@
                 me: me,
                 message: message
             };
-
 
             // Send to Google Sheets
             fetch(GOOGLE_SCRIPT_URL, {
@@ -93,27 +91,31 @@
 
                     alert("Unable to send message.");
 
+                    // Re-enable button on error so user can re-try
+                    NextBtn.disabled = false;
+                    NextBtn.textContent = "Next";
+
                 });
 
         });
 
-
         messageInput.addEventListener("keydown", function (event) {
 
-            // Enter = submit
+            // Enter = submit (if button is not disabled)
             // Shift + Enter = new line
             if (event.key === "Enter" && !event.shiftKey) {
 
                 event.preventDefault();
 
-                NextBtn.click();
+                if (!NextBtn.disabled) {
+                    NextBtn.click();
+                }
 
             }
 
         });
 
     </script>
-
 </body>
 
 </html>
